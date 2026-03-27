@@ -18,14 +18,15 @@ const passport= require('passport')
 const jwt = require('jsonwebtoken');
 const config = require('../database');
 const User = require('../user');
-
+const createDOMPurify = require(isomorphic-dompurify);
+const DOMPurify = createDOMPurify();
 
 router.post('/register', (req, res, next) => {
 	let newUser = new User({
-		name: req.body.name,
-		email: req.body.email,
-		username: req.body.username,
-		password: req.body.password
+		name: DOMPurify.sanitize(req.body.name),
+		email: DOMPurify.sanitize(req.body.email),
+		username: DOMPurify.sanitize(req.body.username),
+		password: DOMPurify.sanitize(req.body.password)
 	});
 	
 	User.addUser(newUser, (err, user) => {
@@ -38,8 +39,8 @@ router.post('/register', (req, res, next) => {
 });
 
 router.post('/authenticate', (req, res, next) => {
-        const username = req.body.username;
-	const password = req.body.password;
+        const username = DOMPurify.sanitize(req.body.username);
+	const password =DOMPurify.sanitize(req.body.password);
 	User.getUserByUsername(username, (err, user) => {
 		if(err) throw err;
 		if(!user){
