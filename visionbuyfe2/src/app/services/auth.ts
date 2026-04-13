@@ -10,7 +10,7 @@ export class AuthService {
 	user: any;
 
 	constructor(private http: HttpClient) { 
-		
+//		this.isDev = true;
 	}
 
 	registerUser(user){
@@ -23,6 +23,14 @@ export class AuthService {
 		let headers = new HttpHeaders();
                 headers.append('Content-Type','application/json');
                 return this.http.post('http://10.0.2.10:3001/users/authenticateUser', user, {headers: headers}).pipe(map((res: any) => res.json));
+	}
+
+	getProfile(){
+                let headers = new HttpHeaders();
+                this.loadToken();
+                headers.append('Authorization', this.authToken);
+                headers.append('Content-Type','application/json');
+		return this.http.get('http://10.0.2.10:3001/users/profile', {headers: headers}).pipe(map((res: any) => res.json));
 	}
 
 	storeUserData(token, user){
@@ -49,11 +57,4 @@ export class AuthService {
 		localStorage.clear();
 	}
 
-	getProfile(){
-		let headers = new HttpHeaders();
-		this.loadToken();
-		headers.append('Authorization', this.authToken);
-                headers.append('Content-Type','application/json');
-                return this.http.get('http://10.0.2.10:/users/profile', {headers: headers}).pipe(map((res: any) => res.json));
-	}
 }
