@@ -1,0 +1,33 @@
+h2 {
+	color: #73A5CA;
+        font-family: verdana;
+        font-size: 300%;
+        margin: 20px;
+        padding: 15px;
+}
+
+input{
+        background-color: #FEFDDF;
+        color: #29241E;
+        margin: 20px 0;
+        padding: 10px;
+
+}
+
+label{
+        color: #29241E;
+        font-family: verdana;
+        font-size: 16px;
+        font-weight: bold;
+}
+
+input[type="submit"]{
+        background-color: #FFC81E;
+        color: #29241E;
+        font-family: verdana;
+        font-size: 18px;
+        margin-top: 30px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+}

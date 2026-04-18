@@ -1,0 +1,10 @@
+a.btn {
+	background-color: #FFC81E;
+        color: #29241E;
+        font-family: verdana;
+        font-size: 18px;
+        margin-top: 30px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+}
