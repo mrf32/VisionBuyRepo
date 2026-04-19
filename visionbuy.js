@@ -19,12 +19,35 @@ mongoose.connection.on('error', (err) => {
 
 
 const app = express();
-const users = require('./routes/users');
-const port = 3001;
-
 app.use(cors());
+app.use(express.json());
+const users = require('./routes/users');
+const port = 3000;
 
-app.use(bodyParser.json());
+
+const corsOptions = {
+	origin: 'http://10.0.2.30:4200',
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+	credentials: true,
+	preflightContinue: true
+};
+
+//app.use(cors(corsOptions));
+//app.use(cors({origin: '*'}));
+//app.options(/.*/, cors());
+//  console.log('Enabling CORS');
+//  app.use(function(req, res, next) {
+//    res.header('Access-Control-Allow-Origin', '*');
+//    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+//    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With'); //Add other headers used in your requests
+
+//    if ('OPTIONS' == req.method) {
+//      res.sendStatus(200);
+//    } else {
+//      next();
+//    }
+// });
+//app.use(express.json());
 
 app.use(session({
 	secret: 'secret',
@@ -38,11 +61,20 @@ app.use(passport.session());
 
 require('./passport')(passport);
 
-app.use('/users', users);
+try {
+	app.use('./users', users);
+}catch (error){
+	console.error(error.message);
+}
 
 app.get('/', (req, res) => {
 	res.send('Invalid Endpoint');
 });
+
+app.get('/register', (req, res) => {
+        res.send('Reached registration page.');
+});
+
 
 app.listen(port, function() {
         console.log("server is running on" + port);
@@ -50,7 +82,7 @@ app.listen(port, function() {
 
 
 
-//mongoose.connect('mongodb://localhost:27017/testdb', {useNewURLParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://10.0.2.20:27017/testdb', {useNewURLParser: true, useUnifiedTopology: true});
 //const db = mongoose.connection;
 
 //async function connectDB() {

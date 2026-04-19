@@ -11,22 +11,21 @@
 //});
 
 //const User = mongoose.model('User', userScheme);
-
-const express = require('express');
+import DOMPurify from 'isomorphic-dompurify';
+import express from 'express';
 const router = express.Router();
-const passport= require('passport')
-const jwt = require('jsonwebtoken');
-const config = require('../database');
-const User = require('../user');
-const createDOMPurify = require(isomorphic-dompurify);
-const DOMPurify = createDOMPurify();
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import config from '../database.js';
+import User from '../user.js';
+const clean = DOMPurify();
 
 router.post('/register', (req, res, next) => {
 	let newUser = new User({
-		name: DOMPurify.sanitize(req.body.name),
-		email: DOMPurify.sanitize(req.body.email),
-		username: DOMPurify.sanitize(req.body.username),
-		password: DOMPurify.sanitize(req.body.password)
+		name: clean.sanitize(req.body.name),
+		email: clean.sanitize(req.body.email),
+		username: clean.sanitize(req.body.username),
+		password: clean.sanitize(req.body.password)
 	});
 	
 	User.addUser(newUser, (err, user) => {
@@ -44,7 +43,7 @@ router.post('/authenticate', (req, res, next) => {
 	User.getUserByUsername(username, (err, user) => {
 		if(err) throw err;
 		if(!user){
-			return res.json(success: false, msg: 'user not found');
+			return res.json({success: false, msg: 'user not found'});
 		}
 		User.comparePassword(password, user.password, (err, isMatch) => {
 			if(err) throw err;
@@ -75,7 +74,7 @@ router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res
 	res.json({user: req.user});
 });
 
-module.exports = router;
+//module.exports = router;
 //const app = express();
 //app.use(express.urlencoded({ extended: true }));
 
